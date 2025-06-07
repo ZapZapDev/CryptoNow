@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f0f23" />
+    <title>CryptoNow - Modern Solana Wallet</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0f0f23;
+            color: #ffffff;
+        }
+
+        #root {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2d2d5a;
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <div class="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 20px; color: #8892b0;">Загрузка CryptoNow...</p>
+    </div>
+</div>
+</body>
+</html>
