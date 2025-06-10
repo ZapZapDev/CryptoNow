@@ -50,31 +50,18 @@ export default function DashboardScreen({ navigation }: any) {
     }
   };
 
-  const handleSend = () => {
-    Alert.alert('Send', 'Функция отправки будет добавлена позже');
-  };
+const handleSend = () => {
+  navigation.navigate('Send');
+};
 
-  const handleReceive = () => {
-    Alert.alert('Receive', 'Функция получения будет добавлена позже');
-  };
+const handleReceive = () => {
+  navigation.navigate('Receive');
+};
 
-  const handleSettings = () => {
-    Alert.alert(
-      'Сброс кошелька',
-      'Вы действительно хотите очистить кошелек? Это действие нельзя отменить.',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        {
-          text: 'Очистить',
-          style: 'destructive',
-          onPress: async () => {
-            await clearWallet();
-            navigation.navigate('Onboarding');
-          },
-        },
-      ]
-    );
-  };
+const handleSettings = () => {
+  navigation.navigate('Settings');
+};
+
 
   const usdValue = balance * solanaPrice;
 

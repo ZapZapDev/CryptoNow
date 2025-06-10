@@ -9,7 +9,7 @@ export type RootStackParamList = {
   Receive: undefined;
   Backup: undefined;
   Settings: undefined;
-  QRScanner: { onScan: (data: string) => void };
+  QRScanner?: { onScan: (data: string) => void };
 };
 
 // Данные кошелька

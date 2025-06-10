@@ -14,6 +14,11 @@ import { RootStackParamList } from './src/types';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import SetPinScreen from './src/screens/SetPinScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import SendScreen from './src/screens/SendScreen';
+import ReceiveScreen from './src/screens/ReceiveScreen';
+import QRScannerScreen from './src/screens/QRScannerScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import BackupScreen from './src/screens/BackupScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,6 +89,12 @@ export default function App() {
     </>
   );
 }
+
+<Stack.Screen name="Send" component={SendScreen} />
+<Stack.Screen name="Receive" component={ReceiveScreen} />
+<Stack.Screen name="QRScanner" component={QRScannerScreen} />
+<Stack.Screen name="Settings" component={SettingsScreen} />
+<Stack.Screen name="BackupScreen" component={BackupScreen} />
 
 const styles = StyleSheet.create({
   loadingContainer: {
