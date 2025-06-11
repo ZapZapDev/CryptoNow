@@ -1,4 +1,3 @@
-// ВАЖНО: Полифиллы должны быть ПЕРВЫМИ!
 import './global';
 
 import React, { useEffect, useState } from 'react';
@@ -83,18 +82,17 @@ export default function App() {
             name="Dashboard"
             component={DashboardScreen}
           />
+          <Stack.Screen name="Send" component={SendScreen} />
+          <Stack.Screen name="Receive" component={ReceiveScreen} />
+          <Stack.Screen name="QRScanner" component={QRScannerScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="BackupScreen" component={BackupScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="light" />
     </>
   );
 }
-
-<Stack.Screen name="Send" component={SendScreen} />
-<Stack.Screen name="Receive" component={ReceiveScreen} />
-<Stack.Screen name="QRScanner" component={QRScannerScreen} />
-<Stack.Screen name="Settings" component={SettingsScreen} />
-<Stack.Screen name="BackupScreen" component={BackupScreen} />
 
 const styles = StyleSheet.create({
   loadingContainer: {

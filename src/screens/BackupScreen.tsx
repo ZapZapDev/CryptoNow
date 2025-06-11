@@ -61,6 +61,41 @@ export default function BackupScreen({ navigation }: any) {
       {!showMnemonic ? (
         <View style={styles.content}>
           <Text style={styles.description}>
+            Введите PIN для доступа к фразе восстановления
+          </Text>
+
+          <View style={styles.warningContainer}>
+            <Text style={styles.warningTitle}>⚠️ Внимание!</Text>
+            <Text style={styles.warningText}>
+              Никому не показывайте эту фразу! С её помощью можно получить полный доступ к вашему кошельку.
+            </Text>
+          </View>
+
+          <TextInput
+            style={styles.pinInput}
+            placeholder="Введите PIN"
+            placeholderTextColor="#666"
+            value={pinInput}
+            onChangeText={setPinInput}
+            keyboardType="numeric"
+            secureTextEntry
+            maxLength={6}
+          />
+
+          <Pressable
+            style={[
+              styles.verifyButton,
+              pinInput.length < 4 && styles.disabledButton,
+            ]}
+            onPress={handleVerifyPin}
+            disabled={pinInput.length < 4}
+          >
+            <Text style={styles.verifyButtonText}>🔓 Показать фразу</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <View style={styles.content}>
+          <Text style={styles.description}>
             Ваша секретная фраза из 12 слов
           </Text>
 
@@ -96,7 +131,7 @@ export default function BackupScreen({ navigation }: any) {
   );
 }
 
-const backupStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f0f23',

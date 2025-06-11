@@ -1,4 +1,3 @@
-// webpack.config.js - ПРОСТОЕ исправление ошибок
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -10,9 +9,12 @@ module.exports = {
   resolve: {
     extensions: ['.web.js', '.js', '.web.ts', '.ts', '.web.tsx', '.tsx', '.json'],
     alias: {
-      'react-native': 'react-native-web',
+      'react-native$': 'react-native-web',
+      'react-native/Libraries/EventEmitter/RCTDeviceEventEmitter': 'react-native-web/dist/vendor/react-native/NativeEventEmitter',
+      'react-native/Libraries/vendor/emitter/EventEmitter': 'react-native-web/dist/vendor/react-native/emitter/EventEmitter',
+      'react-native/Libraries/EventEmitter/NativeEventEmitter': 'react-native-web/dist/vendor/react-native/NativeEventEmitter',
 
-      // ПРОСТОЙ фикс проблемных иконок
+      // Заменяем проблемные иконки на простой Text
       'react-native-vector-icons/MaterialCommunityIcons': 'react-native-web/dist/exports/Text',
       'react-native-vector-icons/MaterialIcons': 'react-native-web/dist/exports/Text',
       'react-native-vector-icons/Ionicons': 'react-native-web/dist/exports/Text',
@@ -31,6 +33,7 @@ module.exports = {
       url: require.resolve('url'),
       querystring: require.resolve('querystring-es3'),
 
+      // Отключаем Node.js модули
       fs: false,
       net: false,
       tls: false,
@@ -49,7 +52,8 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
+        // Обрабатываем все файлы кроме большинства node_modules, но включаем React Native библиотеки
+        exclude: /node_modules\/(?!(react-native|@react-native|react-native-.*|@expo|expo-.*)\/)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -59,15 +63,22 @@ module.exports = {
               '@babel/preset-typescript'
             ],
             plugins: [
-              '@babel/plugin-proposal-class-properties'
+              '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-transform-runtime'
             ]
           }
         }
       },
 
-      // Игнорируем проблемные файлы
+      // CSS файлы
       {
-        test: /\.ttf$/,
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+
+      // Шрифты и изображения
+      {
+        test: /\.(ttf|woff|woff2|eot)$/,
         type: 'asset/resource'
       },
       {
@@ -86,6 +97,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
       '__DEV__': true,
+      'process.env.EXPO_PUBLIC_USE_STATIC': JSON.stringify('true'),
     }),
 
     new webpack.ProvidePlugin({
@@ -97,6 +109,12 @@ module.exports = {
     new webpack.IgnorePlugin({
       resourceRegExp: /@expo\/vector-icons/,
     }),
+
+    // Игнорируем React Native специфичные модули
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^react-native$/,
+      contextRegExp: /react-native-gesture-handler/,
+    }),
   ],
 
   devServer: {
@@ -104,9 +122,17 @@ module.exports = {
     host: 'localhost',
     hot: true,
     open: true,
+    historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
   },
 
   performance: {
     hints: false
+  },
+
+  stats: {
+    warnings: false
   }
 };
