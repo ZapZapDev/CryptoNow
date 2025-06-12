@@ -51,10 +51,7 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.2.0",
     "tweetnacl": "^1.0.3",
-    "zustand": "^4.5.7",
-    "@craftzdog/react-native-buffer": "^6.0.5",
-    "stream-browserify": "^3.0.0",
-    "text-encoding-polyfill": "^0.4.1"
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
     "@types/react": "~18.2.14",
