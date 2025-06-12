@@ -1,19 +1,16 @@
-// global.ts
 import 'react-native-get-random-values';
-import { Buffer } from 'buffer';
+import 'react-native-url-polyfill/auto';
 
-// Полифилл для Buffer
-global.Buffer = Buffer;
+// Полифилл для текстового кодирования (для Solana)
+import 'text-encoding-polyfill';
 
-// Полифилл для процесса
-if (typeof global.process === 'undefined') {
-  global.process = { env: {} } as any;
+// Убеждаемся что все готово для React Native
+if (typeof global === 'undefined') {
+  throw new Error('Global is not defined - это должна быть React Native среда');
 }
 
-// Полифилл для crypto (для веб)
-if (typeof globalThis.crypto === 'undefined') {
-  const { getRandomValues } = require('expo-crypto');
-  globalThis.crypto = {
-    getRandomValues,
-  } as any;
-}
+// Простая проверка что мы в мобильной среде
+console.log('🚀 CryptoNow - Мобильная версия загружена');
+console.log('📱 Platform:', require('react-native').Platform.OS);
+
+export {};

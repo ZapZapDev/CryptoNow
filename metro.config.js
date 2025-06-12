@@ -1,17 +1,44 @@
-// metro.config.js
 const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
-// Добавляем поддержку .cjs файлов для некоторых пакетов
-config.resolver.sourceExts.push('cjs');
+// Поддержка дополнительных расширений файлов
+config.resolver.assetExts.push(
+  // Adds support for `.db` files for SQLite databases
+  'db'
+);
 
-// Добавляем алиасы для полифиллов (будет полезно позже для Solana)
+// Поддержка Solana и крипто библиотек
+config.resolver.platforms = ['native', 'android', 'ios'];
+
+// Исключаем веб-платформы
+config.resolver.platforms = config.resolver.platforms.filter(
+  platform => platform !== 'web'
+);
+
+// Настройки для крипто библиотек
 config.resolver.alias = {
-  ...config.resolver.alias,
-  crypto: 'crypto-browserify',
-  stream: 'readable-stream',
-  buffer: 'buffer',
+  'crypto': 'expo-crypto',
+  'stream': 'stream-browserify',
+  'buffer': '@craftzdog/react-native-buffer',
 };
 
-module.exports = config;
+// Поддержка больших файлов для Solana
+config.transformer.minifierConfig = {
+  keep_classnames: true,
+  keep_fnames: true,
+  mangle: {
+    keep_classnames: true,
+    keep_fnames: true,
+  },
+};
+
+// Оптимизация для продакшена
+if (process.env.NODE_ENV === 'production') {
+  config.transformer.minifierConfig.mangle = {
+    keep_classnames: true,
+    keep_fnames: true,
+  };
+}
+
+module.exports = config;onfig;
