@@ -8,19 +8,16 @@ config.resolver.assetExts.push(
   'db'
 );
 
-// Поддержка Solana и крипто библиотек
+// Поддержка только мобильных платформ
 config.resolver.platforms = ['native', 'android', 'ios'];
 
-// Исключаем веб-платформы
-config.resolver.platforms = config.resolver.platforms.filter(
-  platform => platform !== 'web'
-);
+// В React Native 0.73+ многие полифиллы уже НЕ НУЖНЫ!
+// TextEncoder, btoa, atob теперь доступны глобально в Hermes
 
-// Настройки для крипто библиотек
+// Минимальные настройки для Solana (только если нужно)
 config.resolver.alias = {
   'crypto': 'expo-crypto',
-  'stream': 'stream-browserify',
-  'buffer': '@craftzdog/react-native-buffer',
+  // Убрали: stream, buffer - не нужны для мобильных
 };
 
 // Поддержка больших файлов для Solana
@@ -41,4 +38,4 @@ if (process.env.NODE_ENV === 'production') {
   };
 }
 
-module.exports = config;onfig;
+module.exports = config;
