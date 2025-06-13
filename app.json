@@ -4,10 +4,44 @@
     "slug": "cryptonow",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0d0d0d"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.cryptonow.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Это приложение использует камеру для сканирования QR-кодов с адресами кошельков."
+      }
+    },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0d0d0d"
+      },
       "package": "com.cryptonow.app",
-      "versionCode": 1
-    }
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.VIBRATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Разрешите $(PRODUCT_NAME) использовать камеру для сканирования QR-кодов."
+        }
+      ]
+    ]
   }
 }

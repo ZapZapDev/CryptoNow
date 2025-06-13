@@ -6,7 +6,7 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { isValidSolanaAddress } from '../utils/solana';
 
 interface QRScannerScreenProps {

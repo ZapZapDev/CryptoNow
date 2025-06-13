@@ -50,11 +50,11 @@ export default function OnboardingScreen({ navigation }: any) {
       {/* Логотип и заголовок */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logoEmoji}>🚀</Text>
+          <Text style={styles.logoEmoji}></Text>
         </View>
         <Text style={styles.title}>CryptoNow</Text>
         <Text style={styles.subtitle}>
-          Современный Solana кошелек
+          Делаем мир лучше
         </Text>
       </View>
 
@@ -64,24 +64,7 @@ export default function OnboardingScreen({ navigation }: any) {
           Создайте свой первый Web3 кошелек и начните использовать экосистему Solana
         </Text>
 
-        <View style={styles.featuresContainer}>
-          <FeatureItem
-            emoji="⚡"
-            text="Быстрые транзакции"
-          />
-          <FeatureItem
-            emoji="💰"
-            text="Низкие комиссии"
-          />
-          <FeatureItem
-            emoji="🔒"
-            text="Безопасное хранение"
-          />
-          <FeatureItem
-            emoji="🌐"
-            text="Web3 готовность"
-          />
-        </View>
+
       </View>
 
       {/* Кнопки действий */}
@@ -107,12 +90,7 @@ export default function OnboardingScreen({ navigation }: any) {
         </Pressable>
       </View>
 
-      {/* Примечание о devnet */}
-      <View style={styles.noteContainer}>
-        <Text style={styles.noteText}>
-          📝 Приложение работает в тестовой сети Solana (Devnet)
-        </Text>
-      </View>
+
     </View>
   );
 }
@@ -173,33 +151,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 32,
   },
-  featuresContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginHorizontal: -8,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '48%',
-    marginHorizontal: '1%',
-    marginBottom: 16,
-    padding: 12,
-    backgroundColor: '#1a1a3a',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#2d2d5a',
-  },
-  featureEmoji: {
-    fontSize: 20,
-    marginRight: 8,
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#ccd6f6',
-    flex: 1,
-  },
+
   actionsContainer: {
     marginBottom: 24,
   },
