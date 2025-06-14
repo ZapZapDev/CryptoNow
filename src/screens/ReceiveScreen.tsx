@@ -115,3 +115,153 @@ export default function ReceiveScreen({ navigation }: any) {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0f0f23',
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#ff4757',
+    textAlign: 'center',
+    marginTop: 100,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 60,
+    paddingBottom: 20,
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  backText: {
+    fontSize: 16,
+    color: '#00ff88',
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ccd6f6',
+    flex: 1,
+  },
+  qrContainer: {
+    alignItems: 'center',
+    marginVertical: 32,
+  },
+  qrWrapper: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+  qrLabel: {
+    fontSize: 14,
+    color: '#8892b0',
+    textAlign: 'center',
+  },
+  addressContainer: {
+    backgroundColor: '#1a1a3a',
+    marginHorizontal: 24,
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#2d2d5a',
+  },
+  addressLabel: {
+    fontSize: 16,
+    color: '#ccd6f6',
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  addressShort: {
+    fontSize: 18,
+    color: '#00ff88',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 16,
+    fontFamily: 'monospace',
+  },
+  fullAddressContainer: {
+    backgroundColor: '#0f0f23',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#2d2d5a',
+  },
+  addressFull: {
+    fontSize: 12,
+    color: '#8892b0',
+    fontFamily: 'monospace',
+    lineHeight: 18,
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+    marginBottom: 32,
+    gap: 12,
+  },
+  actionButton: {
+    flex: 1,
+    backgroundColor: '#1a1a3a',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#2d2d5a',
+    alignItems: 'center',
+  },
+  actionEmoji: {
+    fontSize: 24,
+    marginBottom: 8,
+  },
+  actionText: {
+    fontSize: 14,
+    color: '#ccd6f6',
+    fontWeight: '600',
+  },
+  instructionContainer: {
+    backgroundColor: '#1a1a3a',
+    marginHorizontal: 24,
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#2d2d5a',
+  },
+  instructionTitle: {
+    fontSize: 16,
+    color: '#ccd6f6',
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  instructionText: {
+    fontSize: 14,
+    color: '#8892b0',
+    lineHeight: 20,
+  },
+  warningContainer: {
+    backgroundColor: '#2d1b1b',
+    marginHorizontal: 24,
+    marginBottom: 40,
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#5a2d2d',
+  },
+  warningTitle: {
+    fontSize: 16,
+    color: '#ff9999',
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  warningText: {
+    fontSize: 14,
+    color: '#ff9999',
+    lineHeight: 20,
+  },
+});

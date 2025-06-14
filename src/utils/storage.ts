@@ -1,5 +1,3 @@
-
-// src/utils/storage.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Ключи для хранения
@@ -116,44 +114,47 @@ export const clearWalletData = async (): Promise<void> => {
       STORAGE_KEYS.SEED,
       STORAGE_KEYS.PUBLIC_KEY,
       STORAGE_KEYS.PIN_CODE,
+      STORAGE_KEYS.BIOMETRIC_ENABLED,
     ]);
   } catch (error) {
-    console.error('Ошибка очистки данных:', error);
-    throw new Error('Не удалось очистить данные');
+    console.error('Ошибка очистки кошелька:', error);
+    throw new Error('Не удалось очистить данные кошелька');
   }
 };
 
-// Сохранить состояние биометрии
-export const setBiometricEnabled = async (enabled: boolean): Promise<void> => {
+// Сохранить настройку биометрии
+export const saveBiometricEnabled = async (enabled: boolean): Promise<void> => {
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.BIOMETRIC_ENABLED, enabled.toString());
   } catch (error) {
-    console.error('Ошибка сохранения биометрии:', error);
+    console.error('Ошибка сохранения настройки биометрии:', error);
+    throw new Error('Не удалось сохранить настройку биометрии');
   }
 };
 
-// Получить состояние биометрии
+// Проверить, включена ли биометрия
 export const isBiometricEnabled = async (): Promise<boolean> => {
   try {
     const enabled = await AsyncStorage.getItem(STORAGE_KEYS.BIOMETRIC_ENABLED);
     return enabled === 'true';
   } catch (error) {
-    console.error('Ошибка получения биометрии:', error);
+    console.error('Ошибка проверки биометрии:', error);
     return false;
   }
 };
 
-// Проверить первый запуск
+// Проверить, первый ли это запуск
 export const isFirstLaunch = async (): Promise<boolean> => {
   try {
     const firstLaunch = await AsyncStorage.getItem(STORAGE_KEYS.FIRST_LAUNCH);
     if (firstLaunch === null) {
+      // Если ключа нет, значит это первый запуск
       await AsyncStorage.setItem(STORAGE_KEYS.FIRST_LAUNCH, 'false');
       return true;
     }
     return false;
   } catch (error) {
     console.error('Ошибка проверки первого запуска:', error);
-    return true;
+    return true; // В случае ошибки считаем, что это первый запуск
   }
 };

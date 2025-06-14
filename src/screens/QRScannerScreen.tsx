@@ -15,24 +15,18 @@ interface QRScannerScreenProps {
 }
 
 export default function QRScannerScreen({ navigation, route }: QRScannerScreenProps) {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
   const { onScan } = route.params || {};
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+  const handleBarCodeScanned = ({ data }: { data: string }) => {
     setScanned(true);
 
     if (isValidSolanaAddress(data)) {
       if (onScan) {
         onScan(data);
+        navigation.goBack();
       } else {
         Alert.alert('Адрес найден', `Solana адрес: ${data.slice(0, 8)}...${data.slice(-8)}`, [
           { text: 'OK', onPress: () => setScanned(false) },
@@ -45,7 +39,7 @@ export default function QRScannerScreen({ navigation, route }: QRScannerScreenPr
     }
   };
 
-  if (hasPermission === null) {
+  if (!permission) {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Запрос разрешения камеры...</Text>
@@ -53,10 +47,13 @@ export default function QRScannerScreen({ navigation, route }: QRScannerScreenPr
     );
   }
 
-  if (hasPermission === false) {
+  if (!permission.granted) {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Нет доступа к камере</Text>
+        <Pressable style={styles.button} onPress={requestPermission}>
+          <Text style={styles.buttonText}>Разрешить доступ</Text>
+        </Pressable>
         <Pressable style={styles.button} onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Назад</Text>
         </Pressable>
@@ -66,8 +63,11 @@ export default function QRScannerScreen({ navigation, route }: QRScannerScreenPr
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+      <CameraView
+        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        barcodeScannerSettings={{
+          barcodeTypes: ['qr', 'pdf417'],
+        }}
         style={StyleSheet.absoluteFillObject}
       />
 
@@ -104,7 +104,7 @@ export default function QRScannerScreen({ navigation, route }: QRScannerScreenPr
   );
 }
 
-const scannerStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',

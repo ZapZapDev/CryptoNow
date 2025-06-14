@@ -1,8 +1,6 @@
-// src/utils/solana.ts
 import * as solanaWeb3 from '@solana/web3.js';
-import { ethers } from 'ethers';
-import * as Random from 'expo-crypto';
-import nacl from 'tweetnacl';
+import * as bip39 from 'bip39';
+import { derivePath } from 'ed25519-hd-key';
 
 const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL;
 
@@ -14,11 +12,11 @@ export const createConnection = () => {
   );
 };
 
-// Генерация мнемоники (обновленная версия)
+// Генерация мнемоники (исправленная версия)
 export const generateMnemonic = async (): Promise<string> => {
   try {
-    const randomBytes = await Random.getRandomBytesAsync(32);
-    const mnemonic = ethers.utils.entropyToMnemonic(randomBytes);
+    // Генерируем мнемонику на 12 слов
+    const mnemonic = bip39.generateMnemonic(128); // 128 бит = 12 слов
     return mnemonic;
   } catch (error) {
     console.error('Ошибка генерации мнемоники:', error);
@@ -26,23 +24,35 @@ export const generateMnemonic = async (): Promise<string> => {
   }
 };
 
-// Конвертация мнемоники в seed
+// Конвертация мнемоники в seed (исправленная версия)
 export const mnemonicToSeed = (mnemonic: string): string => {
   try {
-    const seed = ethers.utils.mnemonicToSeed(mnemonic);
-    return seed;
+    // Проверяем валидность мнемоники
+    if (!bip39.validateMnemonic(mnemonic)) {
+      throw new Error('Неверная мнемоника');
+    }
+
+    // Генерируем seed из мнемоники
+    const seed = bip39.mnemonicToSeedSync(mnemonic);
+    return seed.toString('hex');
   } catch (error) {
     console.error('Ошибка конвертации мнемоники:', error);
     throw new Error('Неверная мнемоника');
   }
 };
 
-// Создание аккаунта из seed
-export const accountFromSeed = (seed: string): solanaWeb3.Keypair => {
+// Создание аккаунта из seed (исправленная версия)
+export const accountFromSeed = (seedHex: string): solanaWeb3.Keypair => {
   try {
-    const hex = Uint8Array.from(Buffer.from(seed.slice(2), 'hex'));
-    const keyPair = nacl.sign.keyPair.fromSeed(hex.slice(0, 32));
-    return solanaWeb3.Keypair.fromSecretKey(keyPair.secretKey);
+    // Конвертируем hex строку в Buffer
+    const seed = Buffer.from(seedHex, 'hex');
+
+    // Используем стандартный путь деривации для Solana: m/44'/501'/0'/0'
+    const derivationPath = "m/44'/501'/0'/0'";
+    const derivedSeed = derivePath(derivationPath, seed.toString('hex')).key;
+
+    // Создаем keypair из derived seed
+    return solanaWeb3.Keypair.fromSeed(derivedSeed);
   } catch (error) {
     console.error('Ошибка создания аккаунта:', error);
     throw new Error('Не удалось создать аккаунт');
@@ -74,13 +84,13 @@ export const getBalance = async (publicKey: string): Promise<number> => {
 
 // Отправка транзакции
 export const sendTransaction = async (
-  fromSeed: string,
+  fromSeedHex: string,
   fromPublicKey: string,
   toPublicKey: string,
   amount: number
 ): Promise<string> => {
   try {
-    const account = accountFromSeed(fromSeed);
+    const account = accountFromSeed(fromSeedHex);
     const connection = createConnection();
 
     const transaction = new solanaWeb3.Transaction().add(
@@ -113,8 +123,8 @@ export const requestAirdrop = async (publicKeyString: string): Promise<string> =
       LAMPORTS_PER_SOL
     );
 
-    const signature = await connection.confirmTransaction(airdropSignature);
-    return signature.value ? 'success' : 'failed';
+    await connection.confirmTransaction(airdropSignature);
+    return 'success';
   } catch (error) {
     console.error('Ошибка airdrop:', error);
     throw new Error('Не удалось получить airdrop');
@@ -149,4 +159,9 @@ export const isValidSolanaAddress = (address: string): boolean => {
 export const formatAddress = (address: string, chars: number = 4): string => {
   if (!address) return '';
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
+};
+
+// Валидация мнемоники
+export const validateMnemonic = (mnemonic: string): boolean => {
+  return bip39.validateMnemonic(mnemonic);
 };

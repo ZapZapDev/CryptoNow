@@ -8,6 +8,7 @@ export type RootStackParamList = {
   Send: undefined;
   Receive: undefined;
   Backup: undefined;
+  BackupScreen: undefined;
   Settings: undefined;
   QRScanner?: { onScan: (data: string) => void };
 };

@@ -8,12 +8,34 @@ import {
   ScrollView,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
+import { formatAddress } from '../utils/solana';
 
 export default function SettingsScreen({ navigation }: any) {
-  const { clearWallet, publicKey, balance } = useWalletStore();
+  const { clearWallet, publicKey, balance, requestAirdrop } = useWalletStore();
 
   const handleShowRecoveryPhrase = () => {
     navigation.navigate('BackupScreen');
+  };
+
+  const handleRequestAirdrop = async () => {
+    Alert.alert(
+      '🎁 Запрос Airdrop',
+      'Запросить 1 SOL на ваш кошелек для тестирования?',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Запросить',
+          onPress: async () => {
+            try {
+              await requestAirdrop();
+              Alert.alert('✅ Успешно', 'Airdrop запрошен! Токены появятся в течение нескольких секунд.');
+            } catch (error) {
+              Alert.alert('❌ Ошибка', 'Не удалось запросить airdrop. Попробуйте позже.');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleClearWallet = () => {
@@ -56,7 +78,7 @@ export default function SettingsScreen({ navigation }: any) {
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Адрес:</Text>
           <Text style={styles.infoValue}>
-            {publicKey ? `${publicKey.slice(0, 8)}...${publicKey.slice(-8)}` : 'Нет'}
+            {publicKey ? formatAddress(publicKey, 6) : 'Не найден'}
           </Text>
         </View>
         <View style={styles.infoRow}>
@@ -76,7 +98,7 @@ export default function SettingsScreen({ navigation }: any) {
           <View style={styles.settingContent}>
             <Text style={styles.settingText}>Фраза восстановления</Text>
             <Text style={styles.settingDescription}>
-              Показать секретную фразу для восстановления кошелька
+              Показать seed-фразу для восстановления кошелька
             </Text>
           </View>
           <Text style={styles.arrow}>›</Text>
@@ -87,13 +109,13 @@ export default function SettingsScreen({ navigation }: any) {
         <Text style={styles.sectionTitle}>🧪 Тестирование</Text>
         <Pressable
           style={styles.settingItem}
-          onPress={() => navigation.navigate('Dashboard')}
+          onPress={handleRequestAirdrop}
         >
           <Text style={styles.settingEmoji}>🎁</Text>
           <View style={styles.settingContent}>
             <Text style={styles.settingText}>Запросить Airdrop</Text>
             <Text style={styles.settingDescription}>
-              Получить бесплатные тестовые SOL
+              Получить бесплатные SOL для тестирования
             </Text>
           </View>
           <Text style={styles.arrow}>›</Text>
@@ -133,7 +155,7 @@ export default function SettingsScreen({ navigation }: any) {
   );
 }
 
-const settingsStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f0f23',

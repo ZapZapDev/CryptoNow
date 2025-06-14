@@ -1,4 +1,3 @@
-
 // src/screens/OnboardingScreen.tsx
 import React, { useState } from 'react';
 import {
@@ -23,13 +22,21 @@ export default function OnboardingScreen({ navigation }: any) {
     setError(null);
 
     try {
+      console.log('🚀 Начинаем создание кошелька...');
       await createWallet();
+      console.log('✅ Кошелек успешно создан!');
+
       // Переходим к установке PIN-кода
       navigation.navigate('SetPin');
-    } catch (error) {
+    } catch (error: any) {
+      console.error('❌ Ошибка создания кошелька:', error);
+
+      // Показываем детальную ошибку пользователю
+      const errorMessage = error?.message || 'Неизвестная ошибка';
+
       Alert.alert(
-        'Ошибка создания кошелька',
-        'Не удалось создать кошелек. Попробуйте снова.',
+        '❌ Ошибка создания кошелька',
+        `Не удалось создать кошелек:\n\n${errorMessage}\n\nПопробуйте снова или перезапустите приложение.`,
         [{ text: 'OK' }]
       );
     } finally {
@@ -39,9 +46,9 @@ export default function OnboardingScreen({ navigation }: any) {
 
   const handleImportWallet = () => {
     Alert.alert(
-      'Импорт кошелька',
-      'Функция импорта кошелька будет добавлена в следующих версиях',
-      [{ text: 'OK' }]
+      '📥 Импорт кошелька',
+      'Функция импорта кошелька будет добавлена в следующих версиях.\n\nВы сможете восстановить кошелек используя seed-фразу.',
+      [{ text: 'Понятно' }]
     );
   };
 
@@ -50,7 +57,7 @@ export default function OnboardingScreen({ navigation }: any) {
       {/* Логотип и заголовок */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logoEmoji}></Text>
+          <Text style={styles.logoEmoji}>🚀</Text>
         </View>
         <Text style={styles.title}>CryptoNow</Text>
         <Text style={styles.subtitle}>
@@ -64,7 +71,12 @@ export default function OnboardingScreen({ navigation }: any) {
           Создайте свой первый Web3 кошелек и начните использовать экосистему Solana
         </Text>
 
-
+        {/* Показываем ошибку если есть */}
+        {error && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>⚠️ {error}</Text>
+          </View>
+        )}
       </View>
 
       {/* Кнопки действий */}
@@ -75,9 +87,12 @@ export default function OnboardingScreen({ navigation }: any) {
           disabled={isCreating}
         >
           {isCreating ? (
-            <ActivityIndicator color="#0f0f23" size="small" />
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator color="#0f0f23" size="small" />
+              <Text style={styles.loadingText}>Создаю кошелек...</Text>
+            </View>
           ) : (
-            <Text style={styles.primaryButtonText}>Создать новый кошелек</Text>
+            <Text style={styles.primaryButtonText}>🆕 Создать новый кошелек</Text>
           )}
         </Pressable>
 
@@ -86,22 +101,21 @@ export default function OnboardingScreen({ navigation }: any) {
           onPress={handleImportWallet}
           disabled={isCreating}
         >
-          <Text style={styles.secondaryButtonText}>Импортировать кошелек</Text>
+          <Text style={styles.secondaryButtonText}>📥 Импортировать кошелек</Text>
         </Pressable>
       </View>
 
-
+      {/* Важная информация */}
+      <View style={styles.noteContainer}>
+        <Text style={styles.noteText}>
+          🔒 Ваши ключи хранятся только на устройстве{'\n'}
+          🌐 Подключение к Solana Devnet (тестовая сеть){'\n'}
+          ⚡ Бесплатные airdrop токены для тестирования
+        </Text>
+      </View>
     </View>
   );
 }
-
-// Компонент для отображения функций
-const FeatureItem = ({ emoji, text }: { emoji: string; text: string }) => (
-  <View style={styles.featureItem}>
-    <Text style={styles.featureEmoji}>{emoji}</Text>
-    <Text style={styles.featureText}>{text}</Text>
-  </View>
-);
 
 const styles = StyleSheet.create({
   container: {
@@ -149,9 +163,20 @@ const styles = StyleSheet.create({
     color: '#8892b0',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 32,
+    marginBottom: 16,
   },
-
+  errorContainer: {
+    backgroundColor: '#ff4444',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  errorText: {
+    color: '#ffffff',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
+  },
   actionsContainer: {
     marginBottom: 24,
   },
@@ -184,6 +209,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#64ffda',
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0f0f23',
   },
   noteContainer: {
     backgroundColor: '#1a1a3a',
